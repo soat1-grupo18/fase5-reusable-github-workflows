@@ -85,4 +85,9 @@ jobs:
       - name: Terraform apply
         working-directory: ${{ inputs.terraform-directory-path }}
         run: |
-          terraform apply -no-color -auto-approve
+          terraform apply -auto-approve
+
+      - name: Terraform output
+        working-directory: ${{ inputs.terraform-directory-path }}
+        run: |
+          terraform output
