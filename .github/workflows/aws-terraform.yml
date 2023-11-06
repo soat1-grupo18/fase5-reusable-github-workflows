@@ -10,9 +10,8 @@ on:
         required: true
         type: string
       terraform-version:
-        required: false
+        required: true
         type: string
-        default: 1.6.4
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
