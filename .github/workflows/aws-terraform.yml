@@ -17,7 +17,10 @@ on:
         required: true
       AWS_SECRET_ACCESS_KEY:
         required: true
-
+        
+permissions:
+      id-token: write
+      contents: read
 
 jobs:
   terraform-plan:
