@@ -31,6 +31,23 @@ jobs:
           while ! curl --fail --url http://localhost:8080/actuator/health;
             do echo "Aguardando aplicação ficar online..."; sleep 5;
           done;
+          
+      - name: Run tests with Maven
+        run: mvn test --batch-mode --fail-at-end
+
+      - name: Publish test report
+        if: success() || failure()
+        uses: scacap/action-surefire-report@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          report_paths: '**/surefire-reports/*.xml'
+          check_name: Test Report
+
+      - name: Upload test report artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-report
+          path: '**/surefire-reports/*.xml'
 
       - name: Stop docker compose
         run: |
