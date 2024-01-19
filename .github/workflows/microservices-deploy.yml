@@ -9,12 +9,11 @@ on:
 
 permissions:
   id-token: none
-  contents: read
+  contents: write
 
 jobs:
   build-and-test:
     name: Test
-    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
