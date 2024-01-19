@@ -17,41 +17,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Run docker compose
-        run: |
-          set -e
-          docker compose up -d
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '17'
 
-      - name: Wait the application becomes ready
-        run: |
-          set -e
+      - name: Maven Test
+        run: mvn test
 
-          while ! curl --fail --url http://localhost:8080/actuator/health;
-            do echo "Aguardando aplicação ficar online..."; sleep 5;
-          done;
-          
-      - name: Run tests with Maven
-        run: mvn test --batch-mode --fail-at-end
+      - name: Create coverage report
+        run: mkdir coverage-report && cp -r target/site/jacoco/* coverage-report
 
       - name: Publish test report
-        if: success() || failure()
+        if: ${{ always() }}
         uses: scacap/action-surefire-report@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          report_paths: '**/surefire-reports/*.xml'
-          check_name: Test Report
 
-      - name: Upload test report artifact
+      - name: Upload coverage report artifact
         uses: actions/upload-artifact@v2
         with:
-          name: test-report
-          path: '**/surefire-reports/*.xml'
-
-      - name: Stop docker compose
-        run: |
-          docker compose stop
+          name: Test Coverage Report
+          path: coverage-report
 
   build-and-deploy:
     name: Deploy
