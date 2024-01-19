@@ -25,21 +25,12 @@ jobs:
           distribution: 'corretto'
           java-version: '17'
 
-      - name: Maven Test
-        run: mvn test
-
-      - name: Create coverage report
-        run: mkdir coverage-report && cp -r target/site/jacoco/* coverage-report
-
-      - name: Publish test report
-        if: ${{ always() }}
+      - name: Build and Run Tests
+        run: mvn test --batch-mode --fail-at-end
+        
+      - name: Publish Test Report
+        if: success() || failure()
         uses: scacap/action-surefire-report@v1
-
-      - name: Upload coverage report artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: Test Coverage Report
-          path: coverage-report
 
   build-and-deploy:
     name: Deploy
