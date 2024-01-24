@@ -25,12 +25,24 @@ jobs:
           distribution: 'corretto'
           java-version: '17'
 
-      - name: Build and Run Tests
+      - name: Build application
+        run: mvn clean compile
+
+      - name: Run tests
         run: mvn test --batch-mode --fail-at-end
-        
-#      - name: Publish Test Report
-#        if: success() || failure()
-#        uses: scacap/action-surefire-report@v1
+
+      - name: Package application
+        run: mvn package
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKER_HUB_USER }}/${{ inputs.microservice-id }}:${{ github.sha }} .
+
+      - name: Docker login
+        run: docker login -u ${{ secrets.DOCKER_HUB_USER }} -p ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKER_HUB_USER }}/${{ inputs.microservice-id }}:${{ github.sha }}
 
   build-and-deploy:
     name: Deploy
@@ -39,14 +51,5 @@ jobs:
     needs:
       - build-and-test
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Build image
-        run: |
-          docker build -t ${{ secrets.DOCKER_HUB_USER }}/${{ inputs.microservice-id }}:${{ github.sha }} .
-
-      - name: Push image
-        run: |
-          docker login -u ${{ secrets.DOCKER_HUB_USER }} -p ${{ secrets.DOCKER_HUB_TOKEN }}
-          docker push ${{ secrets.DOCKER_HUB_USER }}/${{ inputs.microservice-id }}:${{ github.sha }}
+      - name: Docker login
+        run: docker login -u ${{ secrets.DOCKER_HUB_USER }} -p ${{ secrets.DOCKER_HUB_TOKEN }}
