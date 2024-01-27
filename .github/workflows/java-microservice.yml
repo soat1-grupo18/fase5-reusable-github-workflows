@@ -6,11 +6,9 @@ on:
       java-distribution:
         required: true
         type: string
-        default: corretto
       java-version:
         required: true
         type: string
-        default: "17"
       kubernetes-cluster-name:
         required: true
         type: string
