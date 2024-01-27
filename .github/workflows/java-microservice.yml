@@ -81,12 +81,12 @@ jobs:
 
       - name: Configure kubectl
         run: |
-          aws eks update-kubeconfig --name {{ inputs.kubernetes-cluster-name }}
+          aws eks update-kubeconfig --name ${{ inputs.kubernetes-cluster-name }}
 
       - name: Deploy
         uses: Azure/k8s-deploy@v4
         with:
-          namespace: "{{ inputs.kubernetes-namespace }}"
+          namespace: ${{ inputs.kubernetes-namespace }}
           manifests: |
             ${{ inputs.kubernetes-manifest-directory-path }}
           images: '${{ secrets.DOCKER_HUB_USER }}/soat1-grupo18-ms-pedido:${{ github.sha }}'
