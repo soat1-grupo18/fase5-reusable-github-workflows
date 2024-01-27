@@ -1,4 +1,4 @@
-name: Reusable - Java microservices
+name: Reusable - Java microservice
 
 on:
   workflow_call:
