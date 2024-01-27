@@ -3,10 +3,24 @@ name: Reusable - Java microservices
 on:
   workflow_call:
     inputs:
-      microservice-id:
+      java-distribution:
         required: true
         type: string
-      manifest-directory-path:
+        default: corretto
+      java-version:
+        required: true
+        type: string
+        default: "17"
+      kubernetes-cluster-name:
+        required: true
+        type: string
+      kubernetes-manifest-directory-path:
+        required: true
+        type: string
+      kubernetes-namespace:
+        required: true
+        type: string
+      application-name:
         required: true
         type: string
 
@@ -25,8 +39,8 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'corretto'
-          java-version: '17'
+          distribution: "{{ inputs.java-distribution }}"
+          java-version: "{{ inputs.java-version }}"
 
       - name: Build application
         run: mvn clean compile
@@ -39,12 +53,12 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_HUB_USER }}/${{ inputs.microservice-id }}:${{ github.sha }} .
+          docker build -t ${{ secrets.DOCKER_HUB_USER }}/${{ inputs.application-name }}:${{ github.sha }} .
 
       - name: Push Docker image
         run: |
           docker login -u ${{ secrets.DOCKER_HUB_USER }} -p ${{ secrets.DOCKER_HUB_TOKEN }}
-          docker push ${{ secrets.DOCKER_HUB_USER }}/${{ inputs.microservice-id }}:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_HUB_USER }}/${{ inputs.application-name }}:${{ github.sha }}
 
   deploy:
     name: Deploy
@@ -69,12 +83,12 @@ jobs:
 
       - name: Configure kubectl
         run: |
-          aws eks update-kubeconfig --name fiap-cluster
+          aws eks update-kubeconfig --name {{ inputs.kubernetes-cluster-name }}
 
       - name: Deploy
         uses: Azure/k8s-deploy@v4
         with:
-          namespace: default
+          namespace: "{{ inputs.kubernetes-namespace }}"
           manifests: |
-            ${{ inputs.manifest-directory-path }}
+            ${{ inputs.kubernetes-manifest-directory-path }}
           images: '${{ secrets.DOCKER_HUB_USER }}/soat1-grupo18-ms-pedido:${{ github.sha }}'
