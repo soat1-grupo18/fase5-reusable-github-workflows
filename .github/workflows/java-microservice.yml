@@ -89,4 +89,4 @@ jobs:
           namespace: ${{ inputs.kubernetes-namespace }}
           manifests: |
             ${{ inputs.kubernetes-manifest-directory-path }}
-          images: '${{ secrets.DOCKER_HUB_USER }}/soat1-grupo18-ms-pedido:${{ github.sha }}'
+          images: ${{ secrets.DOCKER_HUB_USER }}/${{ inputs.application-name }}:${{ github.sha }}
