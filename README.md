@@ -7,13 +7,14 @@ Este repositório contém os workflows que são reutilizados por outros reposit�
 
 - [Alunos](#alunos)
 
-Projeto realizado durante o terceiro módulo da Pós Tech Software Architecture da FIAP.
+Projeto realizado durante o quarto módulo da Pós Tech Software Architecture da FIAP.
 
 ### Alunos
 
-|                            Nome |     RM     |
-| ------------------------------: | :--------: |
-|    Elvis Freitas Lopes Herllain | `rm349139` |
-|            Gisele Mara Leonardi | `rm349242` |
-|   Leandro Gonçalves de Oliveira | `rm348615` |
-|                 Pablo Lima Dias | `rm349149` |
+|                                         Nome |     RM     |
+|---------------------------------------------:| :--------: |
+|                 Elvis Freitas Lopes Herllain | `rm349139` |
+|                         Gisele Mara Leonardi | `rm349242` |
+|                Leandro Gonçalves de Oliveira | `rm348615` |
+|                     Marcos Venâncio de Souza | `rm349251` |
+|                              Pablo Lima Dias | `rm349149` |
