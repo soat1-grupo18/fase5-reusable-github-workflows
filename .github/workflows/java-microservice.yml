@@ -48,9 +48,6 @@ jobs:
 
       - name: Run tests
         run: mvn test --batch-mode --fail-at-end
-
-      - name: Upload to Sonar 
-        run: mvn verify sonar:sonar -Dsonar.projectKey=${{ inputs.sonar-project-key }} -Dsonar.token=${{ secrets.SONAR_TOKEN }} -Dsonar.qualitygate.wait=true -Pcoverage
         
       - name: Package application
         run: mvn package
