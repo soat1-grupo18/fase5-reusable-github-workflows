@@ -21,9 +21,6 @@ on:
       kubernetes-namespace:
         required: true
         type: string
-      sonar-project-key:
-        required: true
-        type: string
 
 permissions:
   id-token: write
@@ -48,7 +45,7 @@ jobs:
 
       - name: Run tests
         run: mvn test --batch-mode --fail-at-end
-        
+
       - name: Package application
         run: mvn package
 
