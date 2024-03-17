@@ -52,8 +52,8 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
-            -t ${{ secrets.DOCKER_HUB_USER }}/${{ inputs.application-name }}:latest \
             -t ${{ secrets.DOCKER_HUB_USER }}/${{ inputs.application-name }}:${{ github.sha }} \
+            -t ${{ secrets.DOCKER_HUB_USER }}/${{ inputs.application-name }}:latest \
             .
 
       - name: Push Docker image
@@ -61,7 +61,7 @@ jobs:
           docker login -u ${{ secrets.DOCKER_HUB_USER }} -p ${{ secrets.DOCKER_HUB_TOKEN }}
           docker push ${{ secrets.DOCKER_HUB_USER }}/${{ inputs.application-name }}:${{ github.sha }}
           docker push ${{ secrets.DOCKER_HUB_USER }}/${{ inputs.application-name }}:latest
-
+          
   deploy:
     name: Deploy
     environment: production
